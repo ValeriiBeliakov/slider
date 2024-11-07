@@ -26,17 +26,24 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
       // Creates `style` nodes from JS strings
       isDev ? "style-loader" : MiniCssExtractPlugin.loader,
       // Translates CSS into CommonJS
-      {
-        loader: "css-loader",
-        options: {
-          modules: true,
-        },
-      },
+      "css-loader",
       // Compiles Sass to CSS
       "sass-loader",
     ],
   };
-
+  const cssLoader = {
+    test: /\.css$/i,
+    exclude: /src/,
+    use: [
+      isDev ? "style-loader" : MiniCssExtractPlugin.loader,
+      {
+        loader: "css-loader",
+        options: {
+          modules: false,
+        },
+      },
+    ],
+  };
   const tsLoader = {
     test: /\.tsx?$/,
     exclude: /node_modules/,
@@ -56,6 +63,7 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
     svgLoader,
     imagesLoader,
     scssLoader,
+    cssLoader,
     tsLoader,
     babelLoader
   ];
